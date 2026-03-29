@@ -34,11 +34,15 @@ export class PersonModel {
 
   async getHousings() {
     const entity = new PersonEntity();
-    const housings = await entity.getOwnedHousings(this.#contryCode);
+    const owner = await entity.getOwnedHousings(this.#contryCode);
 
-    this.#housings.push(...housings.housings);
+    this.#housings.push(...owner.housings);
 
-    return this;
+    this.#email = owner.email;
+    this.#phone = owner.phone;
+    this.#name = owner.name;
+
+    return this.serialize();
   }
 
   async create() {

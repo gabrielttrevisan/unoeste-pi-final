@@ -86,7 +86,7 @@ export class PersonEntity {
         P.PEO_EMAIL AS OWNER_EMAIL,
         H.*
       FROM people P
-        INNER JOIN housing H
+        LEFT JOIN houses H
           ON H.HOU_PEO_CPF = P.PEO_CPF
       WHERE P.PEO_CPF = ${countryCode}
     `.run();
@@ -102,14 +102,15 @@ export class PersonEntity {
       phone: first.OWNER_PHONE,
     };
 
-    result.forEach((raw) =>
-      owner.housings.push({
-        id: raw.HOU_ID,
-        price: raw.HOU_PRICE,
-        title: raw.HOU_TITLE,
-        type: raw.HOU_TYPE.split(/,/i).filter(Boolean),
-      }),
-    );
+    result.forEach((raw) => {
+      if (raw.HOU_ID)
+        owner.housings.push({
+          id: raw.HOU_ID,
+          price: raw.HOU_PRICE,
+          title: raw.HOU_TITLE,
+          type: raw.HOU_TYPE.split(/,/i).filter(Boolean),
+        });
+    });
 
     return owner;
   }

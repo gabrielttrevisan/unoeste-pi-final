@@ -45,6 +45,50 @@ export class PersonController {
    * @param {import("express").Response} res
    * @param {import("express").NextFunction} next
    */
+  async getHousings(req, res) {
+    if (!req.params)
+      return res.status(400).json({
+        data: null,
+        error: { code: "BAD_REQUEST", message: "Identificador não informado" },
+      });
+
+    const { cpf } = req.params;
+
+    try {
+      const model = new PersonModel({ countryCode: cpf });
+
+      if (!model.isCountryCodeValid)
+        return res.status(400).json({
+          data: null,
+          error: {
+            code: "BAD_REQUEST",
+            message: "Identificador inválido",
+          },
+        });
+
+      const person = await model.getHousings();
+
+      res.status(200).json({
+        data: person,
+        error: null,
+      });
+    } catch (error) {
+      res.status(500).json({
+        data: null,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message ?? "Erro interno",
+          stackTrace: error.stack,
+        },
+      });
+    }
+  }
+
+  /**
+   * @param {import("express").Request} req
+   * @param {import("express").Response} res
+   * @param {import("express").NextFunction} next
+   */
   async create(req, res) {
     if (!req.body)
       return res.status(400).json({

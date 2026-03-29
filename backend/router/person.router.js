@@ -5,6 +5,7 @@ const personRouter = Router();
 const personController = new PersonController();
 
 personRouter.get("/", personController.getAll);
+personRouter.get("/:cpf/imoveis", personController.getHousings);
 personRouter.post("/", personController.create);
 personRouter.delete("/:cpf", personController.delete);
 personRouter.put("/:cpf", personController.update);
