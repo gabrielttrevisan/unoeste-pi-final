@@ -134,4 +134,91 @@ export class PersonController {
       });
     }
   }
+
+  /**
+   * @param {import("express").Request} req
+   * @param {import("express").Response} res
+   * @param {import("express").NextFunction} next
+   */
+  async update(req, res) {
+    if (!req.params)
+      return res.status(400).json({
+        data: null,
+        error: { code: "BAD_REQUEST", message: "Identificador não informado" },
+      });
+
+    const { cpf } = req.params;
+
+    if (!req.body)
+      return res.status(400).json({
+        data: null,
+        error: { code: "BAD_REQUEST", message: "Corpo da requisição inválido" },
+      });
+
+    const { name, email, phone } = req.body;
+
+    if (!name && !email && !phone)
+      return res.status(400).json({
+        data: null,
+        error: { code: "BAD_REQUEST", message: "Corpo da requisição inválido" },
+      });
+
+    try {
+      const model = new PersonModel({ countryCode: cpf, name, email, phone });
+
+      model.clear();
+
+      if (!model.isCountryCodeValid)
+        return res.status(400).json({
+          data: null,
+          error: {
+            code: "BAD_REQUEST",
+            message: "Identificador inválido",
+          },
+        });
+
+      if (name && !model.isNameValid)
+        return res.status(400).json({
+          data: null,
+          error: {
+            code: "BAD_REQUEST",
+            message: "Nome inválido",
+          },
+        });
+
+      if (email && !model.isEmailValid)
+        return res.status(400).json({
+          data: null,
+          error: {
+            code: "BAD_REQUEST",
+            message: "E-mail inválido",
+          },
+        });
+
+      if (phone && !model.isPhoneValid)
+        return res.status(400).json({
+          data: null,
+          error: {
+            code: "BAD_REQUEST",
+            message: "Telefone inválido",
+          },
+        });
+
+      const updatedCount = await model.update();
+
+      res.status(200).json({
+        data: updatedCount > 0,
+        error: null,
+      });
+    } catch (error) {
+      res.status(500).json({
+        data: null,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message ?? "Erro interno",
+          stackTrace: error.stack,
+        },
+      });
+    }
+  }
 }

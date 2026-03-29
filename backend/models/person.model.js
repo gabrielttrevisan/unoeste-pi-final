@@ -142,23 +142,44 @@ export class PersonModel {
   }
 
   clear() {
-    this.#contryCode = this.#contryCode.replace(/[^\dX]/g, "").toUpperCase();
-    this.#name = this.#name.trim().replace(/\s{2,}/g, " ");
-    this.#email = this.#email.trim().toLowerCase();
-    this.#phone = this.#phone.replace(/\D/g, "");
+    if (this.#contryCode)
+      this.#contryCode = this.#contryCode.replace(/[^\dX]/g, "").toUpperCase();
+    if (this.#name) this.#name = this.#name.trim().replace(/\s{2,}/g, " ");
+    if (this.#email) this.#email = this.#email.trim().toLowerCase();
+    if (this.#phone) this.#phone = this.#phone.replace(/\D/g, "");
   }
 
   get isCountryCodeValid() {
-    if (
-      !this.#contryCode ||
-      this.#contryCode.match(/^(\d{3})\.?(\d{3})\.?(\d{3})-?(\d{2})$/) ===
-        null ||
-      !this.#isCountryCodeValid()
-    ) {
-      return false;
-    }
+    return (
+      this.#contryCode &&
+      this.#contryCode.match(/^(\d{3})\.?(\d{3})\.?(\d{3})-?(\d{2})$/) !==
+        null &&
+      this.#isCountryCodeValid()
+    );
+  }
 
-    return true;
+  get isPhoneValid() {
+    return (
+      this.#phone &&
+      this.#phone.match(/^\(?(\d{2})\)?\s?(\d{4,5})-?(\d{4})$/) !== null
+    );
+  }
+
+  get isNameValid() {
+    return (
+      this.#name &&
+      this.#name.match(/([a-z\-]{2,})\s+([a-z\-]{2,})/i) !== null &&
+      this.#name.match(/-{2,}/g) === null
+    );
+  }
+
+  get isEmailValid() {
+    return (
+      this.#email &&
+      this.#email.match(
+        /([a-z][a-z\-\.0-9]+[a-z0-9])@([a-z][a-z0-9\.]+[a-z])/i,
+      ) !== null
+    );
   }
 
   get validity() {
@@ -170,29 +191,17 @@ export class PersonModel {
       isValid = false;
     }
 
-    if (
-      !this.#phone ||
-      this.#phone.match(/^\(?(\d{2})\)?\s?(\d{4,5})-?(\d{4})$/) === null
-    ) {
+    if (!this.isPhoneValid) {
       invalidFields.push("Telefone");
       isValid = false;
     }
 
-    if (
-      !this.#name ||
-      this.#name.match(/^([a-z\-]{2,})\s+([a-z\-]{2,})$/i) === null ||
-      this.#name.match(/-{2,}/g) !== null
-    ) {
+    if (!this.isNameValid) {
       invalidFields.push("Nome");
       isValid = false;
     }
 
-    if (
-      !this.#email ||
-      this.#email.match(
-        /([a-z][a-z\-\.0-9]+[a-z0-9])@([a-z][a-z0-9\.]+[a-z])/i,
-      ) === null
-    ) {
+    if (!this.isEmailValid) {
       invalidFields.push("E-mail");
       isValid = false;
     }
