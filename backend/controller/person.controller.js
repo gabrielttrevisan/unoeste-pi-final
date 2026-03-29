@@ -14,10 +14,6 @@ import { PersonModel } from "../models/person.model.js";
  */
 
 export class PersonController {
-  constructor() {
-    this.getAll = this.getAll.bind(this);
-  }
-
   /**
    * @param {import("express").Request} req
    * @param {import("express").Response} res
@@ -53,7 +49,7 @@ export class PersonController {
     if (!req.body)
       return res.status(400).json({
         data: null,
-        error: { code: "BAD_REQUEST", message: "Request body missing" },
+        error: { code: "BAD_REQUEST", message: "Corpo da requisição inválido" },
       });
 
     const { cpf, name, email, phone } = req.body;
@@ -77,10 +73,54 @@ export class PersonController {
         });
       }
 
-      const people = await model.create();
+      const createdCount = await model.create();
 
       res.status(200).json({
-        data: people > 0,
+        data: createdCount > 0,
+        error: null,
+      });
+    } catch (error) {
+      res.status(500).json({
+        data: null,
+        error: {
+          code: "INTERNAL_SERVER_ERROR",
+          message: error.message ?? "Erro interno",
+          stackTrace: error.stack,
+        },
+      });
+    }
+  }
+
+  /**
+   * @param {import("express").Request} req
+   * @param {import("express").Response} res
+   * @param {import("express").NextFunction} next
+   */
+  async delete(req, res) {
+    if (!req.params)
+      return res.status(400).json({
+        data: null,
+        error: { code: "BAD_REQUEST", message: "Identificador não informado" },
+      });
+
+    const { cpf } = req.params;
+
+    try {
+      const model = new PersonModel({ countryCode: cpf });
+
+      if (!model.isCountryCodeValid)
+        return res.status(400).json({
+          data: null,
+          error: {
+            code: "BAD_REQUEST",
+            message: "Identificador inválido",
+          },
+        });
+
+      const deletedCount = await model.delete();
+
+      res.status(200).json({
+        data: deletedCount > 0,
         error: null,
       });
     } catch (error) {

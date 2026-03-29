@@ -42,13 +42,6 @@ export class PersonModel {
   }
 
   async create() {
-    const validity = this.validity;
-
-    if (!validity.isValid)
-      throw new Error(
-        `Person #${this.#contryCode} is not valid. Check fields: ${validity.invalidFields.join(", ")}`,
-      );
-
     const entity = new PersonEntity();
 
     return await entity.insert({
@@ -155,16 +148,24 @@ export class PersonModel {
     this.#phone = this.#phone.replace(/\D/g, "");
   }
 
-  get validity() {
-    let isValid = true;
-    const invalidFields = [];
-
+  get isCountryCodeValid() {
     if (
       !this.#contryCode ||
       this.#contryCode.match(/^(\d{3})\.?(\d{3})\.?(\d{3})-?(\d{2})$/) ===
         null ||
       !this.#isCountryCodeValid()
     ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  get validity() {
+    let isValid = true;
+    const invalidFields = [];
+
+    if (!this.isCountryCodeValid) {
       invalidFields.push("CPF");
       isValid = false;
     }

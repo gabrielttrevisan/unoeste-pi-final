@@ -154,7 +154,7 @@ export class PersonEntity {
    */
   async delete(countryCode) {
     const result =
-      await exec`DELETE FROM people WHERE countryCode = ${countryCode}`.run();
+      await exec`DELETE FROM people WHERE PEO_CPF = ${countryCode}`.run();
 
     return result.affectedRows;
   }
