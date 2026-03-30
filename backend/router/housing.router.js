@@ -6,5 +6,7 @@ const housingController = new HousingController();
 
 housingRouter.get("/", housingController.getAll);
 housingRouter.post("/", housingController.create);
+housingRouter.delete("/:id", housingController.delete);
+housingRouter.put("/:id", housingController.update);
 
 export default housingRouter;

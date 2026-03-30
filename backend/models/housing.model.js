@@ -27,15 +27,45 @@ export class HousingModel {
    * @param {PartialHousing} [housing]
    */
   constructor({ id, title, type, price, owner } = {}) {
-    this.#id = id ?? null;
+    this.#id = this.#getId(id);
     this.#title = title ?? null;
-    this.#type = Array.isArray(type)
-      ? type
-      : typeof type === "string"
-        ? type.split(/,/)
-        : null;
+    this.#type = this.#getType(type);
     this.#price = price ?? null;
     this.#owner = owner ?? null;
+  }
+
+  #getType(type) {
+    if (!type) return null;
+
+    let types = [];
+
+    if (Array.isArray(type)) {
+      types = type;
+    }
+
+    if (typeof type === "string") {
+      types = type.split(/,/);
+    }
+
+    return types
+      .filter((type) => typeof type === "string" && type.trim().length)
+      .map((type) => type.trim());
+  }
+
+  #getId(id) {
+    if (!id) return null;
+
+    if (typeof id === "string") {
+      const parsedId = parseInt(id);
+
+      if (parsedId === 0 || isNaN(parsedId)) return null;
+
+      return parsedId;
+    }
+
+    if (typeof id === "number") return id;
+
+    return null;
   }
 
   async getAll() {
@@ -74,12 +104,31 @@ export class HousingModel {
     };
   }
 
+  async delete() {
+    const entity = new HousingEntity();
+
+    return await entity.delete(this.#id);
+  }
+
+  async update() {
+    const entity = new HousingEntity();
+
+    return await entity.update({
+      id: this.#id,
+      price: this.#price,
+      title: this.#title,
+      type: this.#type?.join(","),
+    });
+  }
+
   get isIDValid() {
     return this.#id && typeof this.#id === "number" && this.#id > 0;
   }
 
   get isPriceValid() {
-    return this.#price && typeof this.#price === "number" && this.#price > 10000;
+    return (
+      this.#price && typeof this.#price === "number" && this.#price > 10000
+    );
   }
 
   get isTitleValid() {
@@ -138,6 +187,12 @@ export class HousingModel {
       isValid,
       invalidFields,
     };
+  }
+
+  clear() {
+    if (this.#title) this.#title = this.#title.trim();
+    if (this.#owner instanceof PersonModel) this.#owner.clear();
+    else if (typeof this.#owner === "string") this.#owner = this.#owner.trim();
   }
 
   /**
