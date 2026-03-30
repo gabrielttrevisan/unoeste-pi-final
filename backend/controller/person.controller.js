@@ -21,7 +21,7 @@ export class PersonController {
    */
   async getAll(_, res) {
     try {
-      const model = new PersonModel({ countryCode: "all" });
+      const model = new PersonModel();
       const people = await model.getAll();
 
       res.status(200).json({

@@ -47,7 +47,7 @@ import sql, { Sql } from "../database/core/frag.js";
  * @typedef {Object} RawOwnedHousing
  * @prop {number} HOU_ID
  * @prop {string} HOU_TITLE
- * @prop {string} HOU_TYPE
+ * @prop {string} HOU_TIPO
  * @prop {number} HOU_PRICE
  * @prop {string} HOU_PEO_CPF
  * @prop {string} OWNER_NAME
@@ -108,7 +108,7 @@ export class PersonEntity {
           id: raw.HOU_ID,
           price: raw.HOU_PRICE,
           title: raw.HOU_TITLE,
-          type: raw.HOU_TYPE.split(/,/i).filter(Boolean),
+          type: raw.HOU_TIPO.split(/,/i).filter(Boolean),
         });
     });
 

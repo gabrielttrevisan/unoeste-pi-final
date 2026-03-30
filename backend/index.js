@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import personRouter from "./router/person.router.js";
+import housingRouter from "./router/housing.router.js";
 
 const PORT = 3004;
 const FRONTEND_URL = "http://localhost:3000";
@@ -12,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: FRONTEND_URL }));
 
 app.use("/pessoas", personRouter);
+app.use("/imoveis", housingRouter);
 
 app.use((_, res) => {
   res.status(404).json({

@@ -13,7 +13,7 @@ export class PersonModel {
   #housings;
 
   /**
-   * @param {import("../entities/person.entity").IdentifiablePerson} person
+   * @param {import("../entities/person.entity").IdentifiablePerson} [person]
    */
   constructor({ countryCode, email, name, phone } = { countryCode: "all" }) {
     if (!countryCode)
