@@ -2,10 +2,6 @@ const HOUSING_CARD_TEMPLATE = document.querySelector("template#housing-card");
 
 if (HOUSING_CARD_TEMPLATE) {
   class HousingCardElement extends HTMLElement {
-    static get observedAttributes() {
-      return ["housing-id"];
-    }
-
     #id;
     #price;
     #types;
@@ -169,7 +165,7 @@ if (HOUSING_CARD_TEMPLATE) {
 
       owner.textContent = this.#ownerName.name;
       owner.target = "_blank";
-      owner.href = `/pessoas?code=${this.#ownerName.countryCode}`;
+      owner.href = `/pessoa?code=${this.#ownerName.countryCode}`;
       owner.slot = "owner";
 
       this.append(owner);
