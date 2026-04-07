@@ -17,6 +17,10 @@ export default async function handlePeoplePage(req, res) {
       path.join(__dirname, "../internal/components/people.html"),
       "utf-8",
     ),
+    readFile(
+      path.join(__dirname, "../internal/components/person-form.html"),
+      "utf-8",
+    ),
   );
 
   builder
@@ -24,6 +28,7 @@ export default async function handlePeoplePage(req, res) {
     .withScript("toast")
     .withScript("person-card.element")
     .withScript("people")
+    .withScript("person-form")
     .withStylesheet("people")
     .render();
 }

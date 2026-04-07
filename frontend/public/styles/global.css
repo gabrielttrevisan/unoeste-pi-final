@@ -12,18 +12,22 @@
 }
 
 :root {
-  font-family:
-    "Roboto Flex",
-    Helvetica,
-    Helvetica Neue,
-    sans-serif;
-  font-weight: 300;
-  font-size: 12px;
-
   --colors-background: #333333;
   --colors-foreground: #fff9e7;
+  --colors-invalid: rgb(196, 46, 91);
+  --colors-invalid-decor: rgba(196, 46, 91, 0.2);
+  --font-family: "Roboto Flex", Helvetica, Helvetica Neue, sans-serif;
 
   background-color: var(--colors-background);
+  color: var(--colors-foreground);
+
+  font-family: var(--font-family);
+  font-weight: 300;
+  font-size: 12px;
+}
+
+* {
+  font-family: var(--font-family);
   color: var(--colors-foreground);
 }
 
@@ -178,5 +182,115 @@ body > footer {
     border-top: 2px solid var(--colors-background);
     border-radius: 50%;
     animation: spin 1s linear infinite;
+  }
+
+  > span {
+    display: none;
+  }
+}
+
+.form-input {
+  > label {
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  > .error-message {
+    display: none;
+    color: var(--colors-invalid);
+    margin-top: 0.2rem;
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+  }
+
+  > input {
+    display: block;
+    padding: 0.6rem 0.8rem;
+    font-size: 1.4rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid transparent;
+    border-radius: 0.2rem;
+    font-weight: 300;
+
+    &:invalid {
+      border-color: var(--colors-invalid);
+      outline-color: var(--colors-invalid-decor);
+
+      + .error-message {
+        display: block;
+      }
+    }
+  }
+
+  + .form-input {
+    margin-top: 0.8rem;
+  }
+}
+
+form {
+  [type="submit"] {
+    padding: 0.8rem 1rem;
+    color: var(--colors-background);
+    background: var(--colors-foreground);
+    border: 0;
+    text-transform: uppercase;
+    border-radius: 0.2rem;
+
+    span {
+      color: var(--colors-background);
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 1.6rem;
+  }
+
+  h2.form-action-label {
+    text-transform: capitalize;
+  }
+}
+
+dialog {
+  padding: 2.2rem;
+  border: 1px solid var(--colors-background);
+  background: var(--colors-background);
+  border-radius: 0.6rem;
+  z-index: 200;
+  overflow: visible;
+  margin-top: 5dvh;
+
+  button.close-dialog {
+    border: 0;
+    padding: 1rem;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(-30%, -50%);
+    background: #666666;
+    cursor: pointer;
+    transition: all 200ms ease;
+
+    &:hover {
+      background: #999999;
+    }
+  }
+
+  &::backdrop {
+    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  h2 {
+    margin-top: 0;
+    font-weight: 300;
+    text-transform: uppercase;
   }
 }

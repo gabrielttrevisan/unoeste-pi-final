@@ -1,0 +1,49 @@
+<dialog id="person-form">
+  <button type="button" class="close-dialog">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="currentColor"
+    >
+      <path
+        d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+      ></path>
+    </svg>
+  </button>
+
+  <h2><span class="form-action-label">CRIAR</span> PESSOA</h2>
+
+  <form>
+    <div class="form-input --required">
+      <label for="person-name">Nome Completo</label>
+      <input type="text" id="person-name" name="name" />
+      <span class="error-message"></span>
+    </div>
+
+    <div class="form-input --required">
+      <label for="person-cpf">CPF</label>
+      <input type="text" id="person-cpf" name="cpf" />
+      <span class="error-message"></span>
+    </div>
+
+    <div class="form-input --required">
+      <label for="person-email">E-mail</label>
+      <input type="text" id="person-email" name="email" />
+      <span class="error-message"></span>
+    </div>
+
+    <div class="form-input --required">
+      <label for="person-phone">Telefone</label>
+      <input type="text" id="person-phone" name="phone" />
+      <span class="error-message"></span>
+    </div>
+
+    <div class="actions">
+      <button type="submit">
+        <span class="form-action-label">Criar</span>
+      </button>
+    </div>
+  </form>
+</dialog>

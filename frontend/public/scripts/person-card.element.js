@@ -65,6 +65,23 @@ if (PERSON_CARD_TEMPLATE) {
             });
         });
       }
+
+      const editButton = this.shadowRoot.querySelector(".actions button.edit");
+
+      if (editButton) {
+        editButton.addEventListener("click", () => {
+          window.dispatchEvent(
+            new CustomEvent("person:edit", {
+              detail: {
+                code: this.#code,
+                email: this.#email,
+                phone: this.#phone,
+                name: this.#name,
+              },
+            }),
+          );
+        });
+      }
     }
 
     get code() {
