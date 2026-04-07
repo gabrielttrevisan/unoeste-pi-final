@@ -46,9 +46,9 @@
     padding: 0.8rem 1rem;
     cursor: pointer;
     position: absolute;
-    top: 50%;
+    top: 0;
     right: -0.8rem;
-    transform: translate(100%, -50%);
+    transform: translate(100%, 0);
     z-index: 5;
 
     span {
@@ -61,6 +61,7 @@
       transform: translate(-100%, -50%);
       background: #666666;
       border-radius: 0.4rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     }
 
     &:hover {

@@ -21,7 +21,7 @@ export default async function handlePersonPage(req, res) {
 
   const builder = await HTMLContentBuilder.create(req, res).withContents(
     readFile(
-      path.join(__dirname, "../internal/components/people.html"),
+      path.join(__dirname, "../internal/components/person.html"),
       "utf-8",
     ),
     readFile(
