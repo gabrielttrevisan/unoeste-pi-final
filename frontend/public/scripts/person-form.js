@@ -278,7 +278,7 @@ class PersonForm {
 
 const personFormEl = document.querySelector("dialog#person-form");
 const createPersonBtn = document.querySelector(
-  ".create-person-wrapper button[type='button']",
+  ".create-wrapper.--person button[type='button']",
 );
 
 if (personFormEl && createPersonBtn) {

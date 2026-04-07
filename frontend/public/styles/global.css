@@ -294,3 +294,59 @@ dialog {
     text-transform: uppercase;
   }
 }
+
+.create-wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+
+  > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    color: var(--colors-foreground);
+    background: #666666;
+    transition: all 200ms ease;
+    border: 0;
+    border-radius: 0.4rem;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: -0.8rem;
+    transform: translate(100%, 0);
+    z-index: 5;
+
+    span {
+      display: block;
+      width: 0;
+      overflow: hidden;
+      position: absolute;
+      left: -0.8rem;
+      top: 50%;
+      transform: translate(-100%, -50%);
+      background: #666666;
+      border-radius: 0.4rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    &:hover {
+      background: #999999;
+      gap: 0.4rem;
+
+      &.delete {
+        background: rgb(167, 101, 101);
+        color: rgb(255, 222, 222);
+      }
+
+      span {
+        width: max-content;
+        padding: 0.8rem 1rem;
+      }
+    }
+  }
+}
