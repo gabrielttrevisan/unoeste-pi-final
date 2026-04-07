@@ -25,7 +25,7 @@ export default async function handlePersonPage(req, res) {
       "utf-8",
     ),
     readFile(
-      path.join(__dirname, "../internal/components/housings.html"),
+      path.join(__dirname, "../internal/components/person-housings.html"),
       "utf-8",
     ),
   );

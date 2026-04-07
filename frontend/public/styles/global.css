@@ -190,6 +190,14 @@ body > footer {
 }
 
 .form-input {
+  width: 100%;
+
+  &.--required > label::after {
+    content: " *";
+    color: var(--colors-invalid);
+    font-weight: bold;
+  }
+
   > label {
     display: block;
     margin-bottom: 0.4rem;
@@ -203,7 +211,12 @@ body > footer {
     font-weight: 600;
   }
 
-  > input {
+  option {
+    color: var(--colors-background);
+  }
+
+  > input,
+  > select {
     display: block;
     padding: 0.6rem 0.8rem;
     font-size: 1.4rem;
@@ -211,6 +224,8 @@ body > footer {
     border: 1px solid transparent;
     border-radius: 0.2rem;
     font-weight: 300;
+    width: 100%;
+    box-sizing: border-box;
 
     &:invalid {
       border-color: var(--colors-invalid);
@@ -320,11 +335,13 @@ dialog {
     right: -0.8rem;
     transform: translate(100%, 0);
     z-index: 5;
+    transition: all 200ms ease;
 
     span {
+      transition: all 200ms ease;
       display: block;
-      width: 0;
       overflow: hidden;
+      width: max-content;
       position: absolute;
       left: -0.8rem;
       top: 50%;
@@ -332,10 +349,13 @@ dialog {
       background: #666666;
       border-radius: 0.4rem;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+      opacity: 0;
+      padding: 0.8rem 1rem;
     }
 
     &:hover {
-      background: #999999;
+      background: #52724f;
       gap: 0.4rem;
 
       &.delete {
@@ -344,8 +364,7 @@ dialog {
       }
 
       span {
-        width: max-content;
-        padding: 0.8rem 1rem;
+        opacity: 1;
       }
     }
   }

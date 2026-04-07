@@ -5,6 +5,11 @@
   text-transform: uppercase;
 }
 
+.create-wrapper.--housings {
+  max-width: calc(600px + 1.6rem);
+  width: 100%;
+}
+
 #housing {
   margin: 0;
   padding: 0;

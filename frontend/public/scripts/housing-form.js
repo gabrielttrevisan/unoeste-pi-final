@@ -1,4 +1,4 @@
-class PersonForm {
+class HousingForm {
   /** @type {HTMLDialogElement} */
   #dialog;
   /** @type {HTMLFormElement} */
@@ -14,8 +14,35 @@ class PersonForm {
 
   #init() {
     if (!this.#form) {
-      Toast.error(`Erro de Interface.<br/>Não será possível criar pessoas`);
+      Toast.error(`Erro de Interface.<br/>Não será possível criar imóveis`);
       return;
+    }
+
+    const peopleSelect = this.#form.elements.namedItem("owner");
+
+    if (peopleSelect) {
+      fetch("http://localhost:3004/pessoas")
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.error || !Array.isArray(response.data)) {
+            Toast.error(
+              `Não foi possível carregar pessoas.<br/>${response.error?.message || "Erro inesperado"}`,
+            );
+            this.#dialog.close();
+          } else {
+            response.data.forEach((person) => {
+              const option = document.createElement("option");
+
+              option.value = person.countryCode;
+              option.textContent = person.name;
+
+              peopleSelect.append(option);
+            });
+          }
+        });
+    } else {
+      Toast.error(`Erro de Interface.<br/>Não foi possível buscar pessoas`);
+      this.#dialog.close();
     }
 
     this.#form.addEventListener("submit", (e) => this.#handleSubmit(e));
@@ -44,7 +71,7 @@ class PersonForm {
         });
     });
 
-    window.addEventListener("person:edit", (e) => {
+    window.addEventListener("housing:edit", (e) => {
       Array.from(this.#form.elements).forEach(
         /**
          * @param {HTMLInputElement} input
@@ -54,13 +81,16 @@ class PersonForm {
 
           if (name) {
             const action = {
-              cpf: () => {
-                input.value = e.detail.code;
-                input.readOnly = true;
+              owner: () => {
+                /** @type {HTMLSelectElement} */
+                const select = input;
+                select.value = e.detail.owner || "";
+                select.disabled = true;
               },
-              name: () => (input.value = e.detail.name),
-              email: () => (input.value = e.detail.email),
-              phone: () => (input.value = e.detail.phone),
+              type: () => (input.value = e.detail.type),
+              title: () => (input.value = e.detail.title),
+              price: () => (input.value = e.detail.price),
+              id: () => (input.value = e.detail.id),
             }[name];
 
             if (action) action();
@@ -91,108 +121,42 @@ class PersonForm {
 
   get validationByName() {
     return {
-      name: (value) => this.#validateName(value),
-      email: (value) => this.#validateEmail(value),
-      cpf: (value) => this.#validateCPF(value),
-      phone: (value) => this.#validatePhone(value),
+      title: (value) => this.#validateTitle(value),
+      type: (value) => this.#validateType(value),
+      owner: (value) => this.#validateOwner(value),
+      price: (value) => this.#validatePrice(value),
     };
   }
 
-  #validateName(name) {
+  #validateTitle(title) {
     return (
-      (name &&
-        typeof name === "string" &&
-        name.match(/([a-z\-]{2,})\s+([a-z\-]{2,})/i) !== null &&
-        name.match(/-{2,}/g) === null) ||
-      "Nome inválido"
+      (title && typeof title === "string" && title.trim().length > 16) ||
+      "Título inválido. No mínimo 16 caracteres"
     );
   }
 
-  #validateEmail(email) {
+  #validateType(type) {
     return (
-      (email &&
-        typeof email === "string" &&
-        email
-          .trim()
-          .match(/([a-z][a-z\-\.0-9]+[a-z0-9])@([a-z][a-z0-9\.]+[a-z])/i) !==
-          null) ||
-      "E-mail inválido"
+      (type && type.trim().split(",").length >= 1) ||
+      "Categorias inválidas. Informe ao menos uma"
     );
   }
 
-  #validateCPF(cpf) {
-    return (
-      (cpf &&
-        typeof cpf === "string" &&
-        cpf.match(/^(\d{3})\.?(\d{3})\.?(\d{3})-?(\d{2})$/) !== null &&
-        this.#isCountryCodeValid(cpf.trim())) ||
-      "CPF inválido"
-    );
+  #validateOwner(owner) {
+    return (owner && owner.trim().length === 11) || "Selecione um dono";
   }
 
-  #isCountryCodeValid(value) {
-    const match = value.match(/^(\d{9})-?(\d{2})$/);
+  #validatePrice(value) {
+    if (!value) return "Preço deve ser numérico";
 
-    if (!match) return false;
+    const parsed = parseFloat(value);
 
-    const [, first, last] = match;
+    if (isNaN(parsed)) return "Preço deve ser numérico";
 
-    if (!first || first.length < 9 || !last || last.length < 2) return false;
-
-    const numbers = first
-      .split("")
-      .map(Number)
-      .filter((n) => !isNaN(n));
-
-    if (numbers.length < 9) return false;
-
-    let sum = 0;
-    let firstMark;
-
-    for (let i = 1; i <= 9; i++) {
-      sum = sum + numbers[i - 1] * (11 - i);
-    }
-
-    firstMark = (sum * 10) % 11;
-
-    if (firstMark === 10 || firstMark === 11) {
-      firstMark = 0;
-    }
-
-    if (firstMark.toString() !== last[0]) {
-      return false;
-    }
-
-    numbers.push(firstMark);
-
-    let lastMark;
-
-    sum = 0;
-
-    for (let i = 1; i <= 10; i++) {
-      sum += numbers[i - 1] * (12 - i);
-    }
-
-    lastMark = (sum * 10) % 11;
-
-    if (lastMark === 10 || lastMark === 11) {
-      lastMark = 0;
-    }
-
-    if (lastMark.toString() !== last[1]) {
-      return false;
-    }
+    if (parsed < 10000 || parsed > 999999999)
+      return "O preço deve ser entre 10000 e 999999999";
 
     return true;
-  }
-
-  #validatePhone(phone) {
-    return (
-      (phone &&
-        typeof phone === "string" &&
-        phone.trim().match(/^\(?(\d{2})\)?\s?(\d{4,5})-?(\d{4})$/)) ||
-      "Telefone inválido"
-    );
   }
 
   /**
@@ -204,20 +168,20 @@ class PersonForm {
     if (this.#form.checkValidity()) {
       const button = this.#form.querySelector("button[type=submit]");
       const data = new FormData(this.#form);
-      const action = this.#isEditing ? "alterar" : "criar";
+      const action = this.#isEditing ? "alterar" : "adicionar";
 
       button.classList.add("--loading");
 
       fetch(
         ...(this.#isEditing
           ? [
-              "http://localhost:3004/pessoas/" + data.get("cpf"),
+              "http://localhost:3004/imoveis/" + data.get("id"),
               {
                 method: "PUT",
                 body: JSON.stringify({
-                  name: data.get("name"),
-                  email: data.get("email"),
-                  phone: data.get("phone"),
+                  title: data.get("title"),
+                  price: parseFloat(data.get("price")),
+                  type: data.get("type"),
                 }),
                 headers: {
                   "Content-Type": "application/json; charset=utf-8",
@@ -225,14 +189,14 @@ class PersonForm {
               },
             ]
           : [
-              "http://localhost:3004/pessoas",
+              "http://localhost:3004/imoveis",
               {
                 method: "POST",
                 body: JSON.stringify({
-                  cpf: data.get("cpf"),
-                  name: data.get("name"),
-                  email: data.get("email"),
-                  phone: data.get("phone"),
+                  title: data.get("title"),
+                  price: parseFloat(data.get("price")),
+                  type: data.get("type"),
+                  owner: data.get("owner"),
                 }),
                 headers: {
                   "Content-Type": "application/json; charset=utf-8",
@@ -242,17 +206,17 @@ class PersonForm {
       )
         .catch((e) => {
           Toast.error(
-            `Erro ao ${action} pessoa.<br />${e?.message ?? "Tente novamente mais tarde"}`,
+            `Erro ao ${action} imóvel.<br />${e?.message ?? "Tente novamente mais tarde"}`,
           );
         })
         .then((response) => response.json())
         .then((response) => {
           if (response.error) {
             Toast.error(
-              `Erro ao ${action} pessoa.<br />${response.error.message ?? "Tente novamente mais tarde"}`,
+              `Erro ao ${action} imóvel.<br />${response.error.message ?? "Tente novamente mais tarde"}`,
             );
           } else {
-            Toast.success(`Sucesso ao ${action} pessoa`);
+            Toast.success(`Sucesso ao ${action} imóvel`);
             this.#close();
             setTimeout(() => location.reload(), Toast.timeout);
           }
@@ -267,28 +231,28 @@ class PersonForm {
     this.#form.reset();
     this.#dialog.close();
     Array.from(this.#form.elements).forEach((i) => {
-      if (i.readOnly) i.readOnly = false;
+      if (i.disabled) i.disabled = false;
     });
     this.#isEditing = false;
     this.#dialog.querySelectorAll(".form-action-label").forEach((label) => {
-      label.textContent = "Criar";
+      label.textContent = "Adicionar";
     });
   }
 }
 
-const personFormEl = document.querySelector("dialog#person-form");
-const createPersonBtn = document.querySelector(
-  ".create-wrapper.--person button[type='button']",
+const housingFormEl = document.querySelector("dialog#housing-form");
+const createHounsingBtn = document.querySelector(
+  ".create-wrapper.--housings button[type='button']",
 );
 
-if (personFormEl && createPersonBtn) {
-  const personForm = new PersonForm(personFormEl);
+if (housingFormEl && createHounsingBtn) {
+  const housingForm = new HousingForm(housingFormEl);
 
-  createPersonBtn.addEventListener("click", () => {
-    personForm.create();
+  createHounsingBtn.addEventListener("click", () => {
+    housingForm.create();
   });
 } else {
   Toast.error(
-    "Erro de interface.<br/>Não foi possível criar formulário de pessoas",
+    "Erro de interface.<br/>Não foi possível criar formulário de imóvel",
   );
 }

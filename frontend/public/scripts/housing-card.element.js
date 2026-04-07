@@ -69,6 +69,24 @@ if (HOUSING_CARD_TEMPLATE) {
             });
         });
       }
+
+      const editButton = this.shadowRoot.querySelector(".actions button.edit");
+
+      if (editButton) {
+        editButton.addEventListener("click", () => {
+          window.dispatchEvent(
+            new CustomEvent("housing:edit", {
+              detail: {
+                id: this.#id,
+                owner: this.#ownerId,
+                type: this.#types.join(","),
+                price: this.#price,
+                title: this.#title,
+              },
+            }),
+          );
+        });
+      }
     }
 
     get housingId() {
@@ -159,12 +177,13 @@ if (HOUSING_CARD_TEMPLATE) {
       )
         return;
 
-      this.#ownerName = value;
+      this.#ownerName = value.name;
+      this.#ownerId = value.countryCode;
 
       const owner = document.createElement("a");
 
-      owner.textContent = this.#ownerName.name;
-      owner.href = `/pessoa?code=${this.#ownerName.countryCode}`;
+      owner.textContent = this.#ownerName;
+      owner.href = `/pessoa?code=${this.#ownerId}`;
       owner.slot = "owner";
 
       this.append(owner);

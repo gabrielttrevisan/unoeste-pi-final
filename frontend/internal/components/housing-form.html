@@ -1,0 +1,53 @@
+<dialog id="housing-form">
+  <button type="button" class="close-dialog">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="currentColor"
+    >
+      <path
+        d="M10.5859 12L2.79297 4.20706L4.20718 2.79285L12.0001 10.5857L19.793 2.79285L21.2072 4.20706L13.4143 12L21.2072 19.7928L19.793 21.2071L12.0001 13.4142L4.20718 21.2071L2.79297 19.7928L10.5859 12Z"
+      ></path>
+    </svg>
+  </button>
+
+  <h2><span class="form-action-label">ADICIONAR</span> IMÓVEL</h2>
+
+  <form>
+    <input type="hidden" name="id">
+
+    <div class="form-input --required">
+      <label for="housing-title">Título</label>
+      <input type="text" id="housing-title" name="title" />
+      <span class="error-message"></span>
+    </div>
+
+    <div class="form-input --required">
+      <label for="housing-price">Preço</label>
+      <input type="text" id="housing-price" name="price" />
+      <span class="error-message"></span>
+    </div>
+
+    <div class="form-input --required">
+      <label for="housing-type">Categorias</label>
+      <input type="text" id="housing-type" name="type" />
+      <span class="error-message"></span>
+    </div>
+
+    <div class="form-input --required">
+      <label for="housing-owner">Dono</label>
+      <select type="text" id="housing-owner" name="owner">
+        <option value="">Selecione uma pessoa</option>
+      </select>
+      <span class="error-message"></span>
+    </div>
+
+    <div class="actions">
+      <button type="submit">
+        <span class="form-action-label">ADICIONAR</span> imóvel
+      </button>
+    </div>
+  </form>
+</dialog>

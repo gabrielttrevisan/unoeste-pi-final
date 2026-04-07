@@ -11,11 +11,18 @@
     }
 
     h2 {
+      display: block;
       margin-top: 0;
+      max-width: calc(100% - 56px);
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     slot[name="title"] {
       font-weight: 400;
+      overflow: hidden;
+      width: 100%;
+      white-space: nowrap;
     }
 
     slot[name="type"] {
@@ -24,6 +31,8 @@
       justify-content: flex-start;
       gap: 0.4rem;
       text-transform: capitalize;
+      max-width: calc(100% - 56px);
+      flex-wrap: wrap;
     }
 
     .actions {
@@ -110,4 +119,20 @@
   </div>
 </template>
 
-<ul id="housing" class="housings-list --loading"></ul>
+<div class="create-wrapper --housings">
+  <ul id="housing" class="housings-list --loading"></ul>
+  <button type="button">
+    <span>ADICIONAR IMÓVEL</span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="currentColor"
+    >
+      <path
+        d="M13.0001 10.9999L22.0002 10.9997L22.0002 12.9997L13.0001 12.9999L13.0001 21.9998L11.0001 21.9998L11.0001 12.9999L2.00004 13.0001L2 11.0001L11.0001 10.9999L11 2.00025L13 2.00024L13.0001 10.9999Z"
+      ></path>
+    </svg>
+  </button>
+</div>

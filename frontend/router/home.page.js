@@ -18,6 +18,10 @@ export default (title) =>
         path.join(__dirname, "../internal/components/housings.html"),
         "utf-8",
       ),
+      readFile(
+        path.join(__dirname, "../internal/components/housing-form.html"),
+        "utf-8",
+      ),
     );
 
     builder
@@ -25,6 +29,7 @@ export default (title) =>
       .withScript("toast")
       .withScript("housing-card.element")
       .withScript("housings")
+      .withScript("housing-form")
       .withStylesheet("housings")
       .render();
   };
