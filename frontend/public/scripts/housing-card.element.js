@@ -164,7 +164,6 @@ if (HOUSING_CARD_TEMPLATE) {
       const owner = document.createElement("a");
 
       owner.textContent = this.#ownerName.name;
-      owner.target = "_blank";
       owner.href = `/pessoa?code=${this.#ownerName.countryCode}`;
       owner.slot = "owner";
 
