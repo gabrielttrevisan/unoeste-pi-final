@@ -1,0 +1,28 @@
+[slot="type"] {
+  padding: 0.4rem 0.6rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0.4rem;
+  text-transform: uppercase;
+}
+
+#housing {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  max-width: calc(600px + 1.6rem);
+  width: 100%;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+
+  li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    width: min(300px, 100%);
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+}

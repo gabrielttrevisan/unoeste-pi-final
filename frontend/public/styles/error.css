@@ -1,0 +1,25 @@
+.error__go-home {
+  padding: 0.8rem 1.4rem;
+  background: var(--colors-foreground);
+  color: var(--colors-background);
+  border-radius: 3.2rem;
+}
+
+.error__code {
+  font-weight: 300;
+  font-size: 6.4rem;
+}
+
+.error__message {
+  font-weight: 200;
+  text-transform: uppercase;
+}
+
+h2.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.2rem 0;
+}
