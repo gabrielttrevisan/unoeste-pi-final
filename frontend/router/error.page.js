@@ -24,7 +24,7 @@ export default async function handleErrorPage(
   );
 
   builder
-    .setTitle(`Cursemy - ${message}`)
+    .setTitle(`${message} - PIM`)
     .withStylesheet("error")
     .replace("{{STATUS_CODE}}", code)
     .replace("{{STATUS_MESSAGE}}", message)

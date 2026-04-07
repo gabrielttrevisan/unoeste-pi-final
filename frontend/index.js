@@ -26,8 +26,8 @@ app.use(
   }),
 );
 
-app.get(HOME_ROUTE_MATCH, handleHomePage);
-app.get(HOUSING_ROUTE_MATCH, handleHomePage);
+app.get(HOME_ROUTE_MATCH, handleHomePage("Página Inicial"));
+app.get(HOUSING_ROUTE_MATCH, handleHomePage("Imóveis"));
 app.get(PEOPLE_ROUTE_MATCH, handlePeoplePage);
 app.get(PERSON_ROUTE_MATCH, handlePersonPage);
 app.get(TEST_ERROR_ROUTE_MATCH, handleTestErrorPage);
