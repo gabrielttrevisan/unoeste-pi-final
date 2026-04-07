@@ -29,3 +29,6 @@ if (peopleList)
       }
     })
     .finally(() => peopleList.classList.remove("--loading"));
+else {
+  Toast.error("Falha de interface");
+}

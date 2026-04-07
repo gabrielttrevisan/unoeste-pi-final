@@ -6,8 +6,12 @@ import handleErrorPage from "./router/error.page.js";
 import handleTestErrorPage, {
   TEST_ERROR_ROUTE_MATCH,
 } from "./router/error-test.page.js";
-import handleHomePage, { HOME_ROUTE_MATCH, HOUSING_ROUTE_MATCH } from "./router/home.page.js";
+import handleHomePage, {
+  HOME_ROUTE_MATCH,
+  HOUSING_ROUTE_MATCH,
+} from "./router/home.page.js";
 import handlePeoplePage, { PEOPLE_ROUTE_MATCH } from "./router/people.page.js";
+import handlePersonPage, { PERSON_ROUTE_MATCH } from "./router/person.page.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,6 +29,7 @@ app.use(
 app.get(HOME_ROUTE_MATCH, handleHomePage);
 app.get(HOUSING_ROUTE_MATCH, handleHomePage);
 app.get(PEOPLE_ROUTE_MATCH, handlePeoplePage);
+app.get(PERSON_ROUTE_MATCH, handlePersonPage);
 app.get(TEST_ERROR_ROUTE_MATCH, handleTestErrorPage);
 
 const DURATION_24H = 1000 * 60 * 60 * 24;
